@@ -1,0 +1,1645 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Portal de Estudos UFU 2027-2 • Vestibular</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --navy: #2F4156;
+      --teal: #567C8D;
+      --skyblue: #C8D9E6;
+      --beige: #F5EFEB;
+      --white: #FFFFFF;
+      --sage: #2A9D8F;
+      --amber: #D97706;
+      --indigo: #6366F1;
+      --sky: #0284C7;
+      --crimson: #DC2626;
+      --slate: #4B5563;
+      --radius: 18px;
+      --shadow: 0 6px 24px rgba(47, 65, 86, 0.07);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background-color: var(--beige);
+      color: var(--navy);
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      line-height: 1.55;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    h1, h2, h3, .serif {
+      font-family: 'Playfair Display', Georgia, serif;
+      letter-spacing: -0.01em;
+    }
+
+    .kicker {
+      font-size: 0.68rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      color: var(--teal);
+      display: block;
+    }
+
+    button, select { font-family: inherit; cursor: pointer; }
+    a { text-decoration: none; color: inherit; }
+
+    /* Header & Quick Nav */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      background: rgba(255, 255, 255, 0.96);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--skyblue);
+      box-shadow: 0 2px 12px rgba(47, 65, 86, 0.05);
+    }
+
+    .header-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0.85rem 1.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .brand-group { display: flex; align-items: center; gap: 0.85rem; }
+
+    .hamburger-btn {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      border: none;
+      background: var(--navy);
+      color: var(--white);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      transition: background 0.2s;
+      flex-shrink: 0;
+    }
+    .hamburger-btn:hover { background: var(--teal); }
+    .hamburger-btn span {
+      width: 20px;
+      height: 2px;
+      background: var(--white);
+      border-radius: 2px;
+      display: block;
+    }
+    .hamburger-btn span:nth-child(2) { background: var(--skyblue); }
+
+    .countdown-box {
+      background: var(--beige);
+      border: 1px solid var(--skyblue);
+      border-radius: 14px;
+      padding: 0.45rem 0.95rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .countdown-digits {
+      display: flex;
+      align-items: baseline;
+      gap: 0.4rem;
+      font-weight: 700;
+      color: var(--navy);
+    }
+    .countdown-days {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.45rem;
+      font-weight: 800;
+      color: var(--crimson);
+    }
+    .countdown-hms {
+      font-family: monospace;
+      font-size: 0.82rem;
+      background: var(--white);
+      padding: 0.15rem 0.45rem;
+      border-radius: 6px;
+      border: 1px solid var(--skyblue);
+    }
+
+    .quick-nav-bar {
+      background: rgba(245, 239, 235, 0.85);
+      border-top: 1px solid rgba(200, 217, 230, 0.6);
+    }
+    .quick-nav-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0.5rem 1.25rem;
+      display: flex;
+      gap: 0.45rem;
+      overflow-x: auto;
+    }
+    .pill-btn {
+      border: 1px solid transparent;
+      background: transparent;
+      color: var(--navy);
+      padding: 0.4rem 0.95rem;
+      border-radius: 999px;
+      font-size: 0.74rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      white-space: nowrap;
+      transition: all 0.2s;
+    }
+    .pill-btn:hover { background: var(--skyblue); }
+    .pill-btn.active {
+      background: var(--navy);
+      color: var(--white);
+    }
+
+    /* Drawer */
+    .drawer-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(47, 65, 86, 0.48);
+      z-index: 50;
+      display: none;
+    }
+    .drawer-backdrop.open { display: block; }
+
+    .drawer-panel {
+      position: fixed;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      width: 300px;
+      max-width: 85vw;
+      background: var(--navy);
+      color: var(--white);
+      z-index: 60;
+      transform: translateX(-105%);
+      transition: transform 0.28s ease;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      box-shadow: 8px 0 30px rgba(0, 0, 0, 0.2);
+    }
+    .drawer-panel.open { transform: translateX(0); }
+
+    .drawer-header {
+      padding: 1.35rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .drawer-close {
+      background: rgba(255, 255, 255, 0.12);
+      border: none;
+      color: var(--white);
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      font-size: 1.1rem;
+      font-weight: 700;
+    }
+    .drawer-close:hover { background: var(--teal); }
+
+    .drawer-links { padding: 1rem; display: flex; flex-direction: column; gap: 0.45rem; }
+    .drawer-btn {
+      width: 100%;
+      text-align: left;
+      background: transparent;
+      border: none;
+      color: rgba(255, 255, 255, 0.88);
+      padding: 0.85rem 1rem;
+      border-radius: 12px;
+      transition: background 0.2s;
+    }
+    .drawer-btn:hover { background: rgba(255, 255, 255, 0.1); }
+    .drawer-btn.active { background: var(--teal); color: var(--white); font-weight: 700; }
+    .drawer-btn small { display: block; font-size: 0.72rem; opacity: 0.8; font-weight: 400; }
+
+    .drawer-footer {
+      padding: 1.15rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.12);
+      font-size: 0.75rem;
+      color: var(--skyblue);
+    }
+
+    /* Main Layout */
+    main {
+      max-width: 1200px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 1.5rem 1.25rem 3rem;
+      flex: 1;
+    }
+
+    .tab-view { display: none; animation: fadeIn 0.25s ease; }
+    .tab-view.active { display: block; }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(5px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .card {
+      background: var(--white);
+      border: 1px solid var(--skyblue);
+      border-radius: var(--radius);
+      padding: 1.35rem;
+      box-shadow: var(--shadow);
+      margin-bottom: 1.25rem;
+    }
+
+    .hero-navy {
+      background: var(--navy);
+      color: var(--white);
+      border-radius: 22px;
+      padding: 1.65rem;
+      margin-bottom: 1.25rem;
+      box-shadow: var(--shadow);
+    }
+    .hero-navy .kicker { color: var(--skyblue); }
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.5fr 1fr;
+      gap: 1.25rem;
+      align-items: center;
+    }
+    .hero-stats {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.65rem;
+    }
+    .stat-pill {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: 14px;
+      padding: 0.7rem 0.85rem;
+    }
+    .stat-pill span { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--skyblue); display: block; }
+    .stat-pill strong { font-size: 0.92rem; }
+
+    /* Legend */
+    .legend-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(175px, 1fr));
+      gap: 0.65rem;
+      margin-top: 0.85rem;
+    }
+    .legend-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.6rem;
+      background: var(--beige);
+      padding: 0.65rem 0.8rem;
+      border-radius: 12px;
+      border: 1px solid rgba(200, 217, 230, 0.8);
+      font-size: 0.78rem;
+    }
+    .dot { width: 12px; height: 12px; border-radius: 50%; margin-top: 3px; flex-shrink: 0; }
+
+    /* Calendar Layout */
+    .cal-layout {
+      display: grid;
+      grid-template-columns: 1.65fr 1fr;
+      gap: 1.25rem;
+      align-items: start;
+    }
+    .cal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      padding-bottom: 0.85rem;
+      margin-bottom: 0.85rem;
+      border-bottom: 1px solid var(--skyblue);
+    }
+    .cal-controls {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: var(--beige);
+      padding: 0.3rem;
+      border-radius: 12px;
+      border: 1px solid var(--skyblue);
+    }
+    .cal-nav-btn {
+      background: var(--white);
+      border: 1px solid var(--skyblue);
+      color: var(--navy);
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      font-weight: 700;
+    }
+    .cal-nav-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+    .cal-select {
+      border: none;
+      background: transparent;
+      font-weight: 700;
+      font-size: 0.82rem;
+      color: var(--navy);
+      padding: 0 0.4rem;
+    }
+    .weekdays, .days-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 0.35rem;
+    }
+    .weekdays div {
+      text-align: center;
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: var(--teal);
+      padding-bottom: 0.35rem;
+    }
+    .day-cell {
+      min-height: 70px;
+      border-radius: 12px;
+      border: 1px solid var(--skyblue);
+      background: var(--white);
+      padding: 0.4rem;
+      text-align: left;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: all 0.15s;
+    }
+    .day-cell.empty { background: rgba(245, 239, 235, 0.5); border-color: transparent; cursor: default; }
+    .day-cell.has-plan:hover { background: rgba(200, 217, 230, 0.35); border-color: var(--teal); }
+    .day-cell.selected { background: var(--navy); color: var(--white); border-color: var(--navy); }
+    .day-cell.exam-day { background: var(--crimson); color: var(--white); border-color: var(--crimson); font-weight: 700; }
+    .day-top { display: flex; justify-content: space-between; align-items: center; font-size: 0.82rem; font-weight: 700; }
+    .day-subj { font-size: 0.63rem; color: var(--teal); font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .day-cell.selected .day-subj, .day-cell.exam-day .day-subj { color: var(--skyblue); }
+    .day-bars { display: flex; gap: 2px; margin-top: 3px; }
+    .day-bar { height: 4px; flex: 1; border-radius: 3px; }
+
+    /* Sub-tabs & Filter Buttons */
+    .btn-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 0.65rem;
+      margin-top: 0.85rem;
+    }
+    .choice-btn {
+      padding: 0.9rem 1rem;
+      border-radius: 14px;
+      border: 2px solid var(--skyblue);
+      background: var(--beige);
+      color: var(--navy);
+      text-align: left;
+      transition: all 0.18s;
+    }
+    .choice-btn:hover { border-color: var(--teal); }
+    .choice-btn.active {
+      background: var(--navy);
+      color: var(--white);
+      border-color: var(--navy);
+    }
+    .choice-btn.active .kicker { color: var(--skyblue); }
+
+    .sub-filter-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.45rem;
+      margin-top: 0.9rem;
+      padding-top: 0.9rem;
+      border-top: 1px solid var(--skyblue);
+    }
+    .sub-pill {
+      padding: 0.45rem 0.95rem;
+      border-radius: 10px;
+      border: 1px solid var(--skyblue);
+      background: var(--beige);
+      color: var(--navy);
+      font-size: 0.76rem;
+      font-weight: 700;
+    }
+    .sub-pill.active { background: var(--teal); color: var(--white); border-color: var(--teal); }
+
+    /* Content Boxes */
+    .summary-box {
+      background: var(--beige);
+      border-left: 4px solid var(--teal);
+      border-radius: 12px;
+      padding: 0.9rem 1rem;
+      margin: 0.75rem 0;
+      font-size: 0.88rem;
+    }
+    .action-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      background: var(--teal);
+      color: var(--white);
+      padding: 0.75rem 1.1rem;
+      border-radius: 12px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      margin-top: 0.4rem;
+      margin-right: 0.5rem;
+      transition: background 0.2s;
+    }
+    .action-link:hover { background: var(--navy); }
+
+    .step-item {
+      display: flex;
+      gap: 0.75rem;
+      align-items: flex-start;
+      background: var(--beige);
+      padding: 0.75rem 0.95rem;
+      border-radius: 12px;
+      margin-bottom: 0.5rem;
+      font-size: 0.86rem;
+    }
+    .step-num {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: var(--navy);
+      color: var(--white);
+      font-size: 0.75rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    /* Checklist Progress */
+    .progress-track {
+      width: 100%;
+      height: 12px;
+      background: var(--beige);
+      border-radius: 999px;
+      overflow: hidden;
+      border: 1px solid var(--skyblue);
+      margin: 0.5rem 0;
+    }
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--navy), var(--teal));
+      transition: width 0.3s ease;
+    }
+    .check-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.65rem;
+      padding: 0.65rem 0.8rem;
+      border-radius: 11px;
+      border: 1px solid var(--skyblue);
+      background: var(--beige);
+      margin-bottom: 0.45rem;
+      cursor: pointer;
+      font-size: 0.84rem;
+      user-select: none;
+    }
+    .check-row.done {
+      background: rgba(42, 157, 143, 0.12);
+      border-color: rgba(42, 157, 143, 0.45);
+      text-decoration: line-through;
+      opacity: 0.8;
+    }
+    .check-box {
+      width: 19px;
+      height: 19px;
+      border-radius: 5px;
+      border: 2px solid var(--teal);
+      background: var(--white);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      font-weight: 800;
+      color: var(--white);
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+    .check-row.done .check-box { background: var(--sage); border-color: var(--sage); }
+
+    .two-col-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 1.15rem;
+    }
+
+    footer {
+      background: var(--white);
+      border-top: 1px solid var(--skyblue);
+      padding: 1rem 1.25rem;
+      text-align: center;
+      font-size: 0.78rem;
+      color: var(--slate);
+    }
+
+    @media (max-width: 860px) {
+      .hero-grid, .cal-layout { grid-template-columns: 1fr; }
+      .day-cell { min-height: 56px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- DRAWER LATERAL (MENU 3 RISQUINHOS) -->
+  <div id="drawerBackdrop" class="drawer-backdrop" data-action="close-drawer"></div>
+  <aside id="navDrawer" class="drawer-panel" aria-label="Menu principal">
+    <div>
+      <div class="drawer-header">
+        <div>
+          <span class="kicker" style="color:var(--skyblue)">NAVEGAÇÃO</span>
+          <h2 style="font-size:1.35rem;color:#fff">UFU 2027-2</h2>
+        </div>
+        <button class="drawer-close" data-action="close-drawer" aria-label="Fechar menu">✕</button>
+      </div>
+      <nav class="drawer-links" id="drawerLinks">
+        <button class="drawer-btn active" data-tab="geral">Geral & Cronograma<small>Calendário oficial e metas diárias</small></button>
+        <button class="drawer-btn" data-tab="redacao">Redação<small>6 gêneros e critérios do edital</small></button>
+        <button class="drawer-btn" data-tab="conteudos">Conteúdos<small>Resumos e videoaulas por área</small></button>
+        <button class="drawer-btn" data-tab="progresso">Progresso<small>Checklist completo de estudos</small></button>
+        <button class="drawer-btn" data-tab="questoes">Questões<small>Listas de exercícios direcionadas</small></button>
+        <button class="drawer-btn" data-tab="obras">Obras Literárias<small>5 leituras obrigatórias UFU</small></button>
+      </nav>
+    </div>
+    <div class="drawer-footer">
+      <div>Edital DIRPS Nº 52/2026 • Prova: <strong>04/04/2027</strong></div>
+      <div id="drawerProgText" style="margin-top:4px;color:#fff;font-weight:600">0% do edital concluído</div>
+    </div>
+  </aside>
+
+  <!-- CABEÇALHO FIXO -->
+  <header>
+    <div class="header-inner">
+      <div class="brand-group">
+        <button class="hamburger-btn" data-action="open-drawer" aria-label="Abrir menu de 3 risquinhos">
+          <span></span><span></span><span></span>
+        </button>
+        <div>
+          <span class="kicker">CONCURSO SELETIVO VESTIBULAR • DIRPS Nº 52/2026</span>
+          <h1 style="font-size:1.35rem;line-height:1.15">Portal de Estudos UFU 2027-2</h1>
+        </div>
+      </div>
+
+      <div class="countdown-box">
+        <div>
+          <span class="kicker" style="font-size:0.62rem">PROVA: 04 ABR 2027 • 10H00</span>
+          <div class="countdown-digits">
+            <span id="cdDays" class="countdown-days">--</span>
+            <span style="font-size:0.75rem;color:var(--teal);text-transform:uppercase">dias</span>
+            <span id="cdClock" class="countdown-hms">--:--:--</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BARRA DE ACESSO RÁPIDO ÀS ABAS -->
+    <div class="quick-nav-bar">
+      <div class="quick-nav-inner" id="quickNav">
+        <button class="pill-btn active" data-tab="geral">Geral</button>
+        <button class="pill-btn" data-tab="redacao">Redação</button>
+        <button class="pill-btn" data-tab="conteudos">Conteúdos</button>
+        <button class="pill-btn" data-tab="progresso">Progresso</button>
+        <button class="pill-btn" data-tab="questoes">Questões</button>
+        <button class="pill-btn" data-tab="obras">Obras Literárias</button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- ==================== ABA 1: GERAL ==================== -->
+    <section id="view-geral" class="tab-view active">
+      <div class="hero-navy">
+        <div class="hero-grid">
+          <div>
+            <span class="kicker">GUIA OFICIAL • VESTIBULAR UFU 2027-2</span>
+            <h2 style="font-size:1.65rem;margin:0.35rem 0">Planejamento Estratégico até o Dia da Prova</h2>
+            <p style="font-size:0.86rem;color:var(--skyblue)">
+              Aplicação única em <strong>04/04/2027</strong>: 1ª Fase Objetiva (65 questões, 1 pt cada) + 2ª Fase Redação (80 pts). Explore o calendário de hoje até a prova com as datas oficiais e metas diárias.
+            </p>
+          </div>
+          <div class="hero-stats">
+            <div class="stat-pill"><span>Portões</span><strong>08h45 – 09h45</strong></div>
+            <div class="stat-pill"><span>Prova & Sigilo</span><strong>10h00 / 13h00</strong></div>
+            <div class="stat-pill"><span>Duração Total</span><strong>5h30 minutos</strong></div>
+            <div class="stat-pill"><span>Taxa Inscrição</span><strong>R$ 117,00</strong></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <span class="kicker">CRONOGRAMA OFICIAL DO EDITAL</span>
+        <h3 style="font-size:1.25rem;margin-top:0.2rem">Legenda de Períodos Marcados no Calendário</h3>
+        <div class="legend-grid">
+          <div class="legend-item"><span class="dot" style="background:var(--navy)"></span><div><strong>Inscrições</strong><br>18/01 a 18/02/2027</div></div>
+          <div class="legend-item"><span class="dot" style="background:var(--sage)"></span><div><strong>Solicitação Isenção</strong><br>18/01 a 28/01/2027</div></div>
+          <div class="legend-item"><span class="dot" style="background:var(--amber)"></span><div><strong>Pagamento Taxa</strong><br>18/01 a 19/02/2027</div></div>
+          <div class="legend-item"><span class="dot" style="background:var(--indigo)"></span><div><strong>Atendimento Espec.</strong><br>18/01 a 18/02/2027</div></div>
+          <div class="legend-item"><span class="dot" style="background:var(--sky)"></span><div><strong>Ficha Candidato</strong><br>A partir de 25/03/2027</div></div>
+          <div class="legend-item"><span class="dot" style="background:var(--crimson)"></span><div><strong>Aplicação Provas</strong><br>04/04/2027 (10h00)</div></div>
+        </div>
+      </div>
+
+      <div class="cal-layout">
+        <div class="card">
+          <div class="cal-header">
+            <div>
+              <span class="kicker">CALENDÁRIO INTERATIVO</span>
+              <h3 id="calMonthTitle" style="font-size:1.35rem">Novembro 2026</h3>
+            </div>
+            <div class="cal-controls">
+              <button id="prevMonthBtn" class="cal-nav-btn" data-action="prev-month" title="Mês anterior">‹</button>
+              <select id="monthSelect" class="cal-select" aria-label="Selecionar mês">
+                <option value="0">Novembro 2026</option>
+                <option value="1">Dezembro 2026</option>
+                <option value="2">Janeiro 2027</option>
+                <option value="3">Fevereiro 2027</option>
+                <option value="4">Março 2027</option>
+                <option value="5">Abril 2027</option>
+              </select>
+              <button id="nextMonthBtn" class="cal-nav-btn" data-action="next-month" title="Próximo mês">›</button>
+            </div>
+          </div>
+
+          <div class="weekdays">
+            <div>Dom</div><div>Seg</div><div>Ter</div><div>Qua</div><div>Qui</div><div>Sex</div><div>Sáb</div>
+          </div>
+          <div id="calendarGrid" class="days-grid"></div>
+        </div>
+
+        <div class="card" id="dayDetailCard"></div>
+      </div>
+    </section>
+
+    <!-- ==================== ABA 2: REDAÇÃO ==================== -->
+    <section id="view-redacao" class="tab-view">
+      <div class="card">
+        <span class="kicker">SEGUNDA FASE • 80 PONTOS (15 A 34 LINHAS)</span>
+        <h2 style="font-size:1.55rem;margin-top:0.2rem">Prova de Redação UFU 2027-2</h2>
+        <p style="font-size:0.86rem;color:var(--slate);margin-top:0.35rem">
+          Escolha entre os 6 gêneros discursivos previstos no item 6.3.2 do Edital ou consulte a grade oficial de correção e os motivos de nota zero.
+        </p>
+
+        <div class="sub-filter-row">
+          <button id="btnRedacaoGeneros" class="sub-pill active" data-action="redacao-mode" data-mode="generos">Gêneros Textuais (6)</button>
+          <button id="btnRedacaoCriterios" class="sub-pill" data-action="redacao-mode" data-mode="criterios">Critérios de Avaliação & Nota Zero</button>
+        </div>
+      </div>
+
+      <div id="redacaoGenerosBox">
+        <div class="btn-grid" id="generosBtnGrid"></div>
+        <div class="card" id="generoDetailBox" style="margin-top:1.15rem"></div>
+      </div>
+
+      <div id="redacaoCriteriosBox" style="display:none">
+        <div class="card" style="border-color:var(--crimson);background:rgba(220,38,38,0.05)">
+          <span class="kicker" style="color:var(--crimson)">SUBITEM 6.3.6 (VI) • ELIMINAÇÃO AUTOMÁTICA</span>
+          <h3 style="font-size:1.25rem;margin:0.25rem 0 0.75rem">8 Casos de Nota Zero na Redação UFU</h3>
+          <div class="two-col-grid" style="font-size:0.84rem;gap:0.45rem">
+            <div><strong>a)</strong> Não atendimento à proposta temática;</div>
+            <div><strong>b)</strong> Não atendimento ao gênero solicitado;</div>
+            <div><strong>c)</strong> Folha de redação em branco;</div>
+            <div><strong>d)</strong> Texto com extensão inferior a 15 linhas (máx. 34);</div>
+            <div><strong>e)</strong> Texto integral ou parcialmente em língua estrangeira;</div>
+            <div><strong>f)</strong> Discriminação ou violação de direitos fundamentais;</div>
+            <div><strong>g)</strong> Cópia total do(s) texto(s) motivador(es);</div>
+            <div><strong>h)</strong> Assinaturas, nomes, pseudônimos ou sinais que identifiquem você.</div>
+          </div>
+        </div>
+        <div id="criteriosListBox"></div>
+      </div>
+    </section>
+
+    <!-- ==================== ABA 3: CONTEÚDOS ==================== -->
+    <section id="view-conteudos" class="tab-view">
+      <div class="card">
+        <span class="kicker">TRILHA TEÓRICA & VIDEOAULAS</span>
+        <h2 style="font-size:1.55rem;margin-top:0.2rem">Conteúdos Programáticos UFU</h2>
+        <div class="btn-grid" id="conteudoAreaGrid">
+          <button class="choice-btn active" data-action="cont-area" data-area="matematica">
+            <span class="kicker">7 TÓPICOS</span>
+            <strong style="font-size:1.05rem">Matemática</strong>
+          </button>
+          <button class="choice-btn" data-action="cont-area" data-area="natureza">
+            <span class="kicker">3 DISCIPLINAS</span>
+            <strong style="font-size:1.05rem">Ciências da Natureza</strong>
+          </button>
+          <button class="choice-btn" data-action="cont-area" data-area="humanas">
+            <span class="kicker">4 DISCIPLINAS</span>
+            <strong style="font-size:1.05rem">Ciências Humanas</strong>
+          </button>
+        </div>
+        <div id="conteudoSubRow" class="sub-filter-row" style="display:none"></div>
+      </div>
+      <div id="conteudosCardsList"></div>
+    </section>
+
+    <!-- ==================== ABA 4: PROGRESSO ==================== -->
+    <section id="view-progresso" class="tab-view">
+      <div class="card">
+        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:0.75rem">
+          <div>
+            <span class="kicker">ACOMPANHAMENTO PERSISTENTE</span>
+            <h2 style="font-size:1.55rem;margin-top:0.2rem">Checklist de Conteúdos Vistos</h2>
+          </div>
+          <button class="sub-pill" style="border-color:var(--crimson);color:var(--crimson)" data-action="reset-progress">Reiniciar Checklist</button>
+        </div>
+        <div style="margin-top:1rem">
+          <div style="display:flex;justify-content:space-between;font-weight:700;font-size:0.88rem">
+            <span>Progresso Total do Edital</span>
+            <span id="overallProgLabel" style="color:var(--teal)">0% (0/0)</span>
+          </div>
+          <div class="progress-track"><div id="overallProgFill" class="progress-fill" style="width:0%"></div></div>
+        </div>
+      </div>
+      <div id="progressGroupsGrid" class="two-col-grid"></div>
+    </section>
+
+    <!-- ==================== ABA 5: QUESTÕES ==================== -->
+    <section id="view-questoes" class="tab-view">
+      <div class="card">
+        <span class="kicker">TREINO PRÁTICO & FIXAÇÃO</span>
+        <h2 style="font-size:1.55rem;margin-top:0.2rem">Banco de Questões por Disciplina</h2>
+        <div class="btn-grid" id="questoesAreaGrid">
+          <button class="choice-btn active" data-action="quest-area" data-area="natureza">
+            <span class="kicker">BIOLOGIA • FÍSICA • QUÍMICA</span>
+            <strong style="font-size:1.05rem">Ciências da Natureza</strong>
+          </button>
+          <button class="choice-btn" data-action="quest-area" data-area="humanas">
+            <span class="kicker">HISTÓRIA • GEO • FILO • SOCIO</span>
+            <strong style="font-size:1.05rem">Ciências Humanas</strong>
+          </button>
+          <button class="choice-btn" data-action="quest-area" data-area="matematica">
+            <span class="kicker">7 BLOCOS COMPLETOS</span>
+            <strong style="font-size:1.05rem">Matemática</strong>
+          </button>
+        </div>
+        <div id="questoesSubRow" class="sub-filter-row"></div>
+      </div>
+      <div id="questoesCardsList"></div>
+    </section>
+
+    <!-- ==================== ABA 6: OBRAS LITERÁRIAS ==================== -->
+    <section id="view-obras" class="tab-view">
+      <div class="card">
+        <span class="kicker">LITERATURA • LEITURAS OBRIGATÓRIAS</span>
+        <h2 style="font-size:1.55rem;margin-top:0.2rem">Obras Literárias UFU</h2>
+        <p style="font-size:0.86rem;color:var(--slate);margin-top:0.25rem">Clique em uma obra para ler o resumo crítico e os pontos de prova.</p>
+        <div class="btn-grid" id="obrasBtnGrid"></div>
+      </div>
+      <div class="card" id="obraDetailBox"></div>
+    </section>
+  </main>
+
+  <footer>
+    <strong>Portal de Estudos UFU 2027-2</strong> • Edital DIRPS Nº 52/2026 • Aplicação das Provas: <strong>04/04/2027 às 10h00</strong>
+  </footer>
+
+  <script>
+    // =========================================================================
+    // 1. CONTAGEM REGRESSIVA AO VIVO PARA 04/04/2027 10:00 (BRASÍLIA)
+    // =========================================================================
+    const EXAM_TARGET = new Date('2027-04-04T10:00:00-03:00');
+
+    function updateCountdown() {
+      const now = new Date();
+      const diff = EXAM_TARGET.getTime() - now.getTime();
+      const daysEl = document.getElementById('cdDays');
+      const clockEl = document.getElementById('cdClock');
+      if (!daysEl || !clockEl) return;
+
+      if (diff <= 0) {
+        daysEl.textContent = '0';
+        clockEl.textContent = 'DIA DA PROVA!';
+        return;
+      }
+      const d = Math.floor(diff / 86400000);
+      const h = Math.floor((diff / 3600000) % 24);
+      const m = Math.floor((diff / 60000) % 60);
+      const s = Math.floor((diff / 1000) % 60);
+      daysEl.textContent = String(d);
+      clockEl.textContent = `${String(h).padStart(2,'0')}h ${String(m).padStart(2,'0')}m ${String(s).padStart(2,'0')}s`;
+    }
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+
+    // =========================================================================
+    // 2. CALENDÁRIO & DATAS DO EDITAL (NOV/2026 A ABR/2027)
+    // =========================================================================
+    const MONTHS = [
+      { year: 2026, month: 10, label: 'Novembro 2026' },
+      { year: 2026, month: 11, label: 'Dezembro 2026' },
+      { year: 2027, month: 0,  label: 'Janeiro 2027' },
+      { year: 2027, month: 1,  label: 'Fevereiro 2027' },
+      { year: 2027, month: 2,  label: 'Março 2027' },
+      { year: 2027, month: 3,  label: 'Abril 2027' }
+    ];
+
+    const STUDY_TRACK = [
+      ['Matemática - Conjuntos Numéricos, Razão e Proporção', 'Biologia - Citologia e Membrana Plasmática'],
+      ['Matemática - PA e PG (Progressões)', 'Física - Cinemática e Leis de Newton'],
+      ['Química - Estrutura Atômica e Modelos', 'História Geral - Antiguidade Oriental e Clássica'],
+      ['Geografia - Espaço Geográfico e Clima', 'Filosofia - Sócrates, Platão e Aristóteles'],
+      ['Sociologia - Conceitos Sociológicos e Trabalho', 'Redação - Carta de Solicitação (Estrutura)'],
+      ['Matemática - Porcentagem e Juros Simples/Compostos', 'Biologia - Histologia Animal e Vegetal'],
+      ['Literatura - Uma vida em segredo (Autran Dourado)', 'Simulado Semanal: Matemática e Natureza'],
+      ['Matemática - Funções de 1º e 2º Grau', 'Química - Tabela Periódica e Propriedades'],
+      ['Física - Trabalho, Potência e Energia', 'História do Brasil - Período Colonial'],
+      ['Geografia - Relevo e Dinâmica Terrestre', 'Biologia - Ecologia e Relações Ecológicas'],
+      ['Filosofia - Patrística e Escolástica', 'Sociologia - Estratificação e Desigualdade Social'],
+      ['Redação - Carta de Reclamação (Estrutura)', 'Literatura - Invenção e memória (Lygia Fagundes Telles)'],
+      ['Matemática - Função Exponencial e Logarítmica', 'Química - Ligações Químicas e Polaridade'],
+      ['Matemática - Análise Combinatória e Contagem', 'Biologia - Genética Básica e Leis de Mendel'],
+      ['Física - Dinâmica Impulsiva e Colisões', 'História Geral - Idade Média e Feudalismo'],
+      ['Química - Funções Inorgânicas (Ácidos, Bases, Sais e Óxidos)', 'Geografia - Biogeografia e Biomas do Brasil'],
+      ['Filosofia - Racionalismo e Empirismo', 'Sociologia - Estado, Poder e Dominação (Weber)'],
+      ['Redação - Carta Aberta (Estrutura)', 'Literatura - Coral e outros poemas (Sophia de Mello Breyner)'],
+      ['Matemática - Probabilidade e Estatística', 'Física - Termometria e Calorimetria'],
+      ['Biologia - Evolução e Origem da Vida', 'História do Brasil - Período Joanino e Império'],
+      ['Matemática - Trigonometria no Triângulo e Círculo', 'Química - Reações Inorgânicas e Balanceamento'],
+      ['Física - Gases Ideais e Termodinâmica', 'Geografia - Demografia e Migrações'],
+      ['Biologia - Fisiologia Humana (Sistemas Nervoso e Circulatório)', 'História Geral - Idade Moderna e Iluminismo'],
+      ['Filosofia - Ética (Aristóteles e Kant)', 'Sociologia - Cidadania e Direitos Humanos'],
+      ['Redação - Artigo de Opinião (Estrutura)', 'Literatura - Auto do frade (João Cabral de Melo Neto)'],
+      ['Matemática - Matrizes, Determinantes e Sistemas Lineares', 'Física - Ondulatória e Efeito Doppler'],
+      ['Matemática - Geometria Plana e Relações Métricas', 'Biologia - Embriogênese e Reprodução Humana'],
+      ['Química - Físico-Química: Soluções e Termoquímica', 'História do Brasil - Primeira República e Era Vargas'],
+      ['Física - Óptica Geométrica (Espelhos e Lentes)', 'Geografia - Indústria e Agronegócio'],
+      ['Filosofia - Política e Contratualistas', 'Sociologia - Movimentos Sociais e Minorias'],
+      ['Redação - Resenha Crítica (Estrutura)', 'Literatura - O amor acaba (Paulo Mendes Campos)'],
+      ['Matemática - Geometria Espacial e Analítica', 'Química - Cinética, Equilíbrio e Eletroquímica'],
+      ['Biologia - Taxonomia e Botânica', 'História Geral - Séculos XIX e XX (Guerras e Guerra Fria)'],
+      ['Matemática - Números Complexos e Polinômios', 'Física - Ondas Eletromagnéticas e Eletromagnetismo'],
+      ['Química - Química Orgânica e Ambiental', 'História do Brasil - Ditadura Militar e Nova República'],
+      ['Redação - Relato (Estrutura)', 'Simulado Geral UFU (65 Questões + Redação)']
+    ];
+
+    function getEditalEvents(iso) {
+      const list = [];
+      if (iso >= '2027-01-18' && iso <= '2027-02-18') {
+        list.push({ title: 'Inscrições Abertas', period: '18/01 a 18/02/2027', color: 'var(--navy)', desc: 'Portal Seleção UFU (08h de 18/01 até 16h de 18/02).' });
+        list.push({ title: 'Atendimento Especializado / Específico', period: '18/01 a 18/02/2027', color: 'var(--indigo)', desc: 'Solicitação de acessibilidade, lactante ou nome social.' });
+      }
+      if (iso >= '2027-01-18' && iso <= '2027-01-28') {
+        list.push({ title: 'Solicitação de Isenção da Taxa', period: '18/01 a 28/01/2027', color: 'var(--sage)', desc: 'CadÚnico ou baixa renda Lei 12.799/2013 (até 16h de 28/01).' });
+      }
+      if (iso >= '2027-01-18' && iso <= '2027-02-19') {
+        list.push({ title: 'Pagamento da Taxa (R$ 117,00)', period: '18/01 a 19/02/2027', color: 'var(--amber)', desc: 'Boleto bancário ou PIX via QR Code gerado na inscrição.' });
+      }
+      if (iso === '2027-02-12') {
+        list.push({ title: 'Resultado da Isenção', period: '12/02/2027 (11h)', color: 'var(--sage)', desc: 'Consulta em <Detalhes da sua Inscrição>.' });
+      }
+      if (iso === '2027-02-26') {
+        list.push({ title: 'Deferimento das Inscrições', period: '26/02/2027', color: 'var(--navy)', desc: 'Divulgação das inscrições deferidas e relação candidato/vaga.' });
+      }
+      if (iso === '2027-03-25') {
+        list.push({ title: 'Ficha do(a) Candidato(a)', period: 'A partir de 25/03/2027', color: 'var(--sky)', desc: 'Local de prova, prédio, setor e resultado de atendimento.' });
+      }
+      if (iso === '2027-04-04') {
+        list.push({ title: 'APLICAÇÃO DAS PROVAS (1ª E 2ª FASES)', period: '04/04/2027 • 10h00', color: 'var(--crimson)', desc: 'Portões 08h45–09h45 | Prova 10h00–15h30 (65 objetivas + Redação).' });
+      }
+      return list;
+    }
+
+    function getStudyMeta(iso) {
+      if (iso === '2027-04-04') {
+        return ['DIA DA PROVA UFU: Levar documento original com foto, Ficha do Candidato e caneta transparente azul ou preta.'];
+      }
+      if (iso === '2026-11-25') {
+        return ['Matemática - PA e PG (Progressões)', 'Biologia - Citologia e Membrana Plasmática'];
+      }
+      const start = new Date('2026-11-24T00:00:00');
+      const end = new Date('2027-04-04T00:00:00');
+      const cur = new Date(iso + 'T00:00:00');
+      if (cur < start || cur > end) return null;
+      const diff = Math.floor((cur - start) / 86400000);
+      return STUDY_TRACK[diff % STUDY_TRACK.length];
+    }
+
+    let state = {
+      monthIdx: 0,
+      selectedDay: '2026-11-25',
+      redacaoGenre: 'solicitacao',
+      contArea: 'matematica',
+      contDisc: 'matematica',
+      questArea: 'natureza',
+      questDisc: 'biologia',
+      obraId: 'vida-segredo'
+    };
+
+    function renderCalendar() {
+      const m = MONTHS[state.monthIdx];
+      document.getElementById('calMonthTitle').textContent = m.label;
+      document.getElementById('monthSelect').value = String(state.monthIdx);
+      document.getElementById('prevMonthBtn').disabled = state.monthIdx === 0;
+      document.getElementById('nextMonthBtn').disabled = state.monthIdx === MONTHS.length - 1;
+
+      const grid = document.getElementById('calendarGrid');
+      grid.innerHTML = '';
+
+      const firstWeekday = new Date(m.year, m.month, 1).getDay();
+      const totalDays = new Date(m.year, m.month + 1, 0).getDate();
+
+      for (let i = 0; i < firstWeekday; i++) {
+        const empty = document.createElement('div');
+        empty.className = 'day-cell empty';
+        grid.appendChild(empty);
+      }
+
+      for (let d = 1; d <= totalDays; d++) {
+        const iso = `${m.year}-${String(m.month + 1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+        const evs = getEditalEvents(iso);
+        const plan = getStudyMeta(iso);
+        const isSel = iso === state.selectedDay;
+        const isExam = iso === '2027-04-04';
+
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = `day-cell ${plan ? 'has-plan' : ''} ${isSel ? 'selected' : ''} ${isExam ? 'exam-day' : ''}`;
+        btn.setAttribute('data-action', 'select-day');
+        btn.setAttribute('data-iso', iso);
+
+        const shortSubj = plan ? plan[0].split('-')[0].trim() : '';
+        const bars = evs.map(e => `<span class="day-bar" style="background:${isExam ? '#fff' : e.color}"></span>`).join('');
+
+        btn.innerHTML = `
+          <div class="day-top"><span>${d}</span>${isExam ? '<span>★</span>' : ''}</div>
+          <div class="day-subj">${isExam ? 'PROVA UFU' : shortSubj}</div>
+          <div class="day-bars">${bars}</div>
+        `;
+        grid.appendChild(btn);
+      }
+      renderDayDetail();
+    }
+
+    function renderDayDetail() {
+      const box = document.getElementById('dayDetailCard');
+      const [y, m, d] = state.selectedDay.split('-');
+      const mNames = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+      const title = `${parseInt(d,10)} de ${mNames[parseInt(m,10)-1]} de ${y}`;
+      const evs = getEditalEvents(state.selectedDay);
+      const plan = getStudyMeta(state.selectedDay);
+
+      let evHtml = evs.length
+        ? evs.map(e => `
+            <div style="padding:0.7rem 0.85rem;border-radius:12px;border-left:4px solid ${e.color};background:var(--beige);margin-bottom:0.5rem">
+              <strong style="font-size:0.82rem;display:block">${e.title} (${e.period})</strong>
+              <span style="font-size:0.78rem;color:var(--slate)">${e.desc}</span>
+            </div>
+          `).join('')
+        : `<p style="font-size:0.82rem;color:var(--slate);background:var(--beige);padding:0.75rem;border-radius:12px">Sem prazos administrativos do edital neste dia.</p>`;
+
+      let planHtml = plan
+        ? plan.map(item => `
+            <div class="step-item" style="margin-top:0.5rem">
+              <span class="step-num">✓</span>
+              <div><strong>${item}</strong></div>
+            </div>
+          `).join('')
+        : `<p style="font-size:0.82rem;color:var(--slate)">Fora do ciclo ativo de estudos (24/11/2026 a 04/04/2027).</p>`;
+
+      box.innerHTML = `
+        <span class="kicker">DETALHES DO DIA SELECIONADO</span>
+        <h3 style="font-size:1.35rem;margin:0.2rem 0 0.85rem">${title}</h3>
+        <div style="margin-bottom:1rem">
+          <span class="kicker" style="margin-bottom:0.45rem">MARCAÇÕES DO EDITAL</span>
+          ${evHtml}
+        </div>
+        <div>
+          <span class="kicker" style="margin-bottom:0.45rem">RECOMENDAÇÃO DE ESTUDO</span>
+          ${planHtml}
+        </div>
+      `;
+    }
+
+    // =========================================================================
+    // 3. DADOS DA REDAÇÃO (6 GÊNEROS + CRITÉRIOS DO EDITAL)
+    // =========================================================================
+    const GENEROS = [
+      {
+        id: 'solicitacao', num: 'I', title: 'Carta de solicitação',
+        resumo: 'Texto argumentativo endereçado a uma autoridade, órgão público ou instituição para requerer providências, recursos, melhorias ou autorizações diante de uma demanda fundamentada.',
+        manual: [
+          'Local e data (ex: Uberlândia, 04 de abril de 2027) sem revelar dados pessoais reais.',
+          'Vocativo formal adequado ao destinatário indicado na proposta.',
+          'Introdução: Apresente o papel social atribuído no comando e explicite o pedido logo no 1º parágrafo.',
+          'Desenvolvimento: Argumente com base nos textos motivadores e na relevância social do pedido.',
+          'Conclusão e assinatura: Reafirme a solicitação com cordialidade, despeça-se formalmente ("Atenciosamente,") e assine APENAS com o papel genérico pedido na proposta (nunca seu nome próprio).'
+        ],
+        yt: 'https://www.youtube.com/results?search_query=carta+de+solicitacao+redacao+ufu'
+      },
+      {
+        id: 'reclamacao', num: 'II', title: 'Carta de reclamação',
+        resumo: 'Gênero utilizado para manifestar insatisfação fundamentada sobre um serviço, produto ou problema coletivo, exigindo reparação ou solução do responsável.',
+        manual: [
+          'Local e data + Vocativo formal direcionado ao responsável pelo problema.',
+          'Introdução: Relate objetivamente o problema ocorrido (o quê, quando e onde) e o motivo da reclamação.',
+          'Desenvolvimento: Detalhe os transtornos causados e fundamente a cobrança de direitos.',
+          'Conclusão: Exija uma solução concreta e retorno em prazo razoável.',
+          'Despedida formal seguida estritamente da identificação genérica indicada no comando.'
+        ],
+        yt: 'https://www.youtube.com/results?search_query=carta+de+reclamacao+redacao+ufu'
+      },
+      {
+        id: 'aberta', num: 'III', title: 'Carta aberta',
+        resumo: 'Texto de caráter público e coletivo endereçado a autoridades ou à sociedade para alertar, reivindicar direitos ou mobilizar a opinião pública sobre tema relevante.',
+        manual: [
+          'Título obrigatório e direto (ex: "CARTA ABERTA À COMUNIDADE...").',
+          'Vocativo coletivo ou institucional dirigido aos destinatários.',
+          'Introdução: Contextualize o tema de interesse público e a posição do grupo representado.',
+          'Desenvolvimento: Articule argumentos persuasivos em 1ª pessoa do plural ("nós") ou 3ª pessoa.',
+          'Conclusão: Faça uma convocação à ação/conscientização e assine apenas como o coletivo indicado na proposta.'
+        ],
+        yt: 'https://www.youtube.com/results?search_query=carta+aberta+redacao+ufu'
+      },
+      {
+        id: 'artigo', num: 'IV', title: 'Artigo de opinião',
+        resumo: 'Gênero jornalístico-argumentativo no qual o autor analisa uma questão polêmica, defende uma tese explícita e busca persuadir o leitor com argumentos consistentes.',
+        manual: [
+          'Título atrativo e relacionado ao recorte temático.',
+          'Introdução: Contextualize a polêmica e apresente sua tese de forma clara.',
+          'Desenvolvimento (2 parágrafos): Defenda a tese com dados, exemplos e contra-argumentação.',
+          'Conclusão: Retome a tese sintetizando o posicionamento crítico.',
+          'NÃO assine ao final (o edital da UFU atribui nota zero a qualquer assinatura que identifique o candidato).'
+        ],
+        yt: 'https://www.youtube.com/results?search_query=artigo+de+opiniao+redacao+ufu'
+      },
+      {
+        id: 'resenha', num: 'V', title: 'Resenha crítica',
+        resumo: 'Texto que combina a síntese descritiva de uma obra cultural (livro, filme, peça, álbum ou objeto indicado) com uma análise avaliativa fundamentada.',
+        manual: [
+          'Título criativo que antecipe seu olhar crítico sobre a obra.',
+          'Introdução: Apresente a obra (título, autor/diretor, contexto) e sua tese avaliativa.',
+          'Desenvolvimento: Sintetize os elementos centrais e analise criticamente méritos e limitações, dialogando com os motivadores.',
+          'Conclusão: Sintetize o juízo de valor final e a relevância da obra para o público.',
+          'Não assine o texto ao final.'
+        ],
+        yt: 'https://www.youtube.com/results?search_query=resenha+critica+redacao+ufu'
+      },
+      {
+        id: 'relato', num: 'VI', title: 'Relato',
+        resumo: 'Narrativa não ficcional centrada em uma experiência vivida ou testemunhada, destacando fatos, impressões, sentimentos e aprendizados decorrentes.',
+        manual: [
+          'Título expressivo ligado à experiência relatada.',
+          'Introdução: Situe tempo, espaço, envolvidos e o fato central (uso de 1ª pessoa e verbos no pretérito).',
+          'Desenvolvimento: Narre os acontecimentos em sequência clara, explorando reflexões e sensações.',
+          'Conclusão: Apresente o desfecho e a transformação ou aprendizado obtido.',
+          'Nunca mencione nomes próprios reais ou sinais que identifiquem você.'
+        ],
+        yt: 'https://www.youtube.com/results?search_query=genero+relato+redacao+ufu'
+      }
+    ];
+
+    const CRITERIOS_UFU = [
+      { title: '1. Proposta Temática (20 pts)', levels: '20 pts: Atendimento total | 15 pts: Satisfatório | 10 pts: Parcial | 5 pts: Tangenciamento | 0 pt: Fuga ao tema.' },
+      { title: '2. Gênero do Discurso (20 pts)', levels: '20 pts: Todos os elementos constitutivos | 15 pts: Falhas na construção composicional | 10 pts: Falhas no estilo | 5 pts: Insatisfatório | 0 pt: Irreconhecível.' },
+      { title: '3. Leitura, Motivadores e Repertório (8 pts)', levels: '8 pts: Compreensão global, diálogo e repertório sem cópia | 6 pts: Falha em 1 critério | 4 pts: Falha em 2+ | 0 pt: Cópia ou falha total.' },
+      { title: '4. Coesão e Coerência Textuais (20 pts)', levels: '20 pts: Totalmente coeso e coerente | 15 pts: Falhas pontuais de coesão | 10 pts: Falhas de coerência/progressão | 5 pts: Pouco coeso/coerente | 0 pt: Incoeso.' },
+      { title: '5. Convenções de Escrita (12 pts)', levels: '12 pts: Pleno domínio (máx. 2 desvios) | 9 pts: Bom domínio | 6 pts: Pouco domínio | 3 pts: Domínio insatisfatório.' }
+    ];
+
+    function renderRedacao() {
+      const grid = document.getElementById('generosBtnGrid');
+      grid.innerHTML = GENEROS.map(g => `
+        <button type="button" class="choice-btn ${g.id === state.redacaoGenre ? 'active' : ''}" data-action="select-genre" data-genre="${g.id}">
+          <span class="kicker">GÊNERO ${g.num}</span>
+          <strong style="font-size:1.02rem">${g.title}</strong>
+        </button>
+      `).join('');
+
+      const g = GENEROS.find(x => x.id === state.redacaoGenre);
+      document.getElementById('generoDetailBox').innerHTML = `
+        <span class="kicker">GÊNERO ${g.num} • EDITAL UFU 2027-2</span>
+        <h3 style="font-size:1.45rem;margin:0.2rem 0">${g.title}</h3>
+        <div class="summary-box"><strong>O que é:</strong> ${g.resumo}</div>
+        <h4 style="font-size:0.82rem;text-transform:uppercase;letter-spacing:0.08em;margin:1rem 0 0.6rem">Manual Sintetizado: Como Fazer</h4>
+        ${g.manual.map((m, i) => `<div class="step-item"><span class="step-num">${i+1}</span><div>${m}</div></div>`).join('')}
+        <a href="${g.yt}" target="_blank" rel="noopener noreferrer" class="action-link">▶ Assistir Videoaula Recomendada (${g.title}) ↗</a>
+      `;
+
+      document.getElementById('criteriosListBox').innerHTML = CRITERIOS_UFU.map(c => `
+        <div class="card">
+          <h4 style="font-size:1.05rem;margin-bottom:0.4rem">${c.title}</h4>
+          <p style="font-size:0.85rem;color:var(--slate)">${c.levels}</p>
+        </div>
+      `).join('');
+    }
+
+    // =========================================================================
+    // 4. DADOS DE CONTEÚDOS (RESUMOS + VIDEOAULAS)
+    // =========================================================================
+    const CONTEUDOS = {
+      matematica: {
+        matematica: {
+          name: 'Matemática',
+          items: [
+            { t: '1. Conjuntos Numéricos, Razões, Proporções, Porcentagem e Juros', s: 'Operações em ℕ, ℤ, ℚ, 𝕀, ℝ, grandezas proporcionais, regra de três, aumentos/descontos percentuais e juros simples e compostos.', v: ['Playlist de Conjuntos Numéricos - Prof. Ferretto', 'Playlist de Razão, Proporção e Matemática Financeira - Prof. Ferretto'] },
+            { t: '2. Funções, Equações, Inequações e Sequências/Progressões', s: 'Funções afim, quadrática, modular, exponencial e logarítmica, gráficos e fórmulas de PA e PG.', v: ['Playlist de Funções (1º e 2º Grau) - Prof. Ferretto', 'Playlist de Progressões (PA e PG) - Prof. Ferretto'] },
+            { t: '3. Análise Combinatória, Probabilidade e Estatística', s: 'Princípio fundamental da contagem, permutações, arranjos, combinações, probabilidade e média, moda, mediana e desvio padrão.', v: ['Playlist de Análise Combinatória e Probabilidade - Prof. Ferretto'] },
+            { t: '4. Trigonometria', s: 'Triângulo retângulo, ciclo trigonométrico (seno, cosseno, tangente), leis dos senos e dos cossenos e funções trigonométricas.', v: ['Playlist de Trigonometria - Prof. Ferretto'] },
+            { t: '5. Matrizes, Determinantes e Sistemas Lineares', s: 'Operações matriciais, determinantes (Sarrus e Laplace), matriz inversa e escalonamento/Regra de Cramer.', v: ['Playlist de Matrizes, Determinantes e Sistemas - Prof. Ferretto'] },
+            { t: '6. Geometria Plana, Espacial e Analítica Plana', s: 'Áreas e perímetros planos, volumes de prismas, cilindros, cones, pirâmides e esferas, além de ponto, reta e circunferência.', v: ['Playlist de Geometria Plana - Prof. Ferretto', 'Playlist de Geometria Espacial - Prof. Ferretto'] },
+            { t: '7. Números Complexos, Polinômios e Equações Algébricas', s: 'Forma algébrica e trigonométrica dos complexos, operações com polinômios, Briot-Ruffini e relações de Girard.', v: ['Playlist de Números Complexos e Polinômios - Prof. Ferretto'] }
+          ]
+        }
+      },
+      natureza: {
+        biologia: {
+          name: 'Biologia',
+          items: [
+            { t: '1. Citologia', s: 'Células procariontes e eucariontes, membrana plasmática, organelas, respiração, fotossíntese, mitose e meiose.', v: ['Introdução à Citologia - Biologia com Samuel Cunha', 'Membrana Plasmática - Prof. Paulo Jubilut'] },
+            { t: '2. Histologia', s: 'Tecidos animais (epitelial, conjuntivo, muscular e nervoso) e tecidos vegetais.', v: ['Resumão: Histologia - Anatomia e etc. com Natalia Reinecke'] },
+            { t: '3. Ecologia', s: 'Ecossistemas, cadeias e teias alimentares, relações ecológicas, ciclos biogeoquímicos e sucessão ecológica.', v: ['Ecologia - Playlist Completa / Biologia Total com Paulo Jubilut'] },
+            { t: '4. Genética', s: 'Leis de Mendel, heredogramas, grupos sanguíneos ABO/Rh, herança ligada ao sexo e biotecnologia.', v: ['Genética Básica e Leis de Mendel - Biologia com Samuel Cunha'] },
+            { t: '5. Evolução e Origem da Vida', s: 'Abiogênese x biogênese, Lamarckismo, Darwinismo, Neodarwinismo e evidências evolutivas.', v: ['Teorias Evolutivas (Lamarck e Darwin) - Prof. Paulo Jubilut'] },
+            { t: '6. Fisiologia Humana e Animal', s: 'Sistemas digestório, respiratório, circulatório, excretor, nervoso, endócrino e imunológico.', v: ['Sistema Nervoso - Prof. Paulo Jubilut', 'Sistema Circulatório - Prof. Paulo Jubilut'] },
+            { t: '7. Embriogênese', s: 'Clivagem, blástula, gástrula, nêurula, folhetos germinativos e anexos embrionários.', v: ['Embriologia Humana e Anexos Embrionários - Biologia com Samuel Cunha'] },
+            { t: '8. Reprodução Humana', s: 'Sistemas reprodutores, gametogênese, ciclo menstrual e métodos contraceptivos.', v: ['Sistema Reprodutor Masculino e Feminino - Prof. Paulo Jubilut'] },
+            { t: '9. Classificação dos Seres Vivos (Taxonomia)', s: 'Nomenclatura binomial, categorias taxonômicas e características dos cinco reinos.', v: ['Reinos dos Seres Vivos - Biologia Total com Paulo Jubilut'] },
+            { t: '10. Morfologia e Fisiologia Vegetal (Botânica)', s: 'Raiz, caule, folha, flor, fruto, condução de seiva, transpiração e hormônios vegetais.', v: ['Botânica para o ENEM (Aulas completas) - Biologia com Samuel Cunha'] }
+          ]
+        },
+        fisica: {
+          name: 'Física',
+          items: [
+            { t: '1. Forças e Mecânica', s: 'Cinemática, Leis de Newton, força de atrito, plano inclinado e estática.', v: ['Mecânica e Leis de Newton - Playlist de Física / Descomplica'] },
+            { t: '2. Trabalho e Energia', s: 'Trabalho mecânico, potência, energia cinética, potenciais e conservação de energia.', v: ['Trabalho, Potência e Energia - Aulas do Prof. Boaro'] },
+            { t: '3. Dinâmica Impulsiva', s: 'Impulso, quantidade de movimento, teorema do impulso e colisões.', v: ['Impulso e Quantidade de Movimento - Aulas para ENEM e Vestibulares'] },
+            { t: '4. Calor (Termometria e Calorimetria)', s: 'Escalas termométricas, dilatação, calor sensível, calor latente e propagação térmica.', v: ['Calorimetria e Propagação de Calor - Descomplica'] },
+            { t: '5. Gases Ideais e Termodinâmica', s: 'Transformações gasosas, Equação de Clapeyron e Leis da Termodinâmica.', v: ['Termodinâmica e Leis dos Gases - Aulas Teóricas e Exercícios'] },
+            { t: '6. Ondulatória', s: 'Equação fundamental da onda, reflexão, refração, difração, interferência e Efeito Doppler.', v: ['Ondas: Fenômenos e Equação Fundamental - Professor Boaro'] },
+            { t: '7. Óptica e Fenômenos Luminosos', s: 'Espelhos planos e esféricos, refração da luz e lentes esféricas.', v: ['Óptica Geométrica (Espelhos e Lentes) - Descomplica'] },
+            { t: '8. Ondas Eletromagnéticas', s: 'Espectro eletromagnético, propriedades e aplicações tecnológicas.', v: ['Espectro Eletromagnético e Aplicações - Aulas de Física Geral'] },
+            { t: '9. Geração e Consumo de Energia', s: 'Fontes renováveis e não renováveis, usinas elétricas e cálculo de consumo em kWh.', v: ['Fontes de Energia e Cálculo de Consumo (kWh) - Física no ENEM'] },
+            { t: '10. Eletromagnetismo', s: 'Campo magnético, força magnética e indução eletromagnética (Faraday-Lenz).', v: ['Eletromagnetismo (Quer que Desenhe?) - Descomplica'] }
+          ]
+        },
+        quimica: {
+          name: 'Química',
+          items: [
+            { t: '1. Estrutura e Modelos da Matéria', s: 'Modelos atômicos (Dalton a Bohr), íons, isótopos e distribuição eletrônica.', v: ['Estrutura Atômica e Modelos - Café com Química'] },
+            { t: '2. Tabela Periódica', s: 'Famílias, períodos e propriedades periódicas (raio atômico, eletronegatividade e energia de ionização).', v: ['Tabela Periódica e Propriedades - Café com Química'] },
+            { t: '3. Ligações Químicas', s: 'Ligações iônicas, covalentes e metálicas, polaridade e forças intermoleculares.', v: ['Ligações Iônicas, Covalentes e Metálicas - Café com Química'] },
+            { t: '4. Funções e Reações Químicas', s: 'Ácidos, bases, sais e óxidos, reações inorgânicas e balanceamento.', v: ['Funções Inorgânicas (Ácidos, Bases, Sais e Óxidos) - Café com Química'] },
+            { t: '5. Físico-Química', s: 'Soluções, termoquímica, cinética química, equilíbrio químico e eletroquímica.', v: ['Termoquímica, Soluções e Eletroquímica - Prof. Filipe Barros'] },
+            { t: '6. Química Orgânica e Ambiental', s: 'Cadeias carbônicas, funções orgânicas, isomeria, reações e impactos ambientais.', v: ['Química Orgânica (Cadeias, Funções e Reações) - Prof. Filipe Barros'] }
+          ]
+        }
+      },
+      humanas: {
+        historia: {
+          name: 'História',
+          noSummary: true,
+          items: [
+            { t: 'História Geral', s: '', v: ['Playlist História Geral - Antiguidade, Idade Média, Moderna e Contemporânea'] },
+            { t: 'História do Brasil', s: '', v: ['Playlist História do Brasil - Colônia, Império, Era Vargas, Ditadura e Nova República'] }
+          ]
+        },
+        geografia: {
+          name: 'Geografia',
+          items: [
+            { t: 'Curso Completo Gratuito (Playlist Oficial)', s: 'Curso estruturado de Geografia Física, Humana, Econômica e Geopolítica.', v: ['PROJETO ENEM - GEOGRAFIA (Curso Completo) - Profª Thais Formagio'] },
+            { t: '1. Geografia Física (Clima, Relevo, Vegetação e Dinâmica Terrestre)', s: 'Elementos climáticos, climogramas, formas de relevo e domínios vegetais.', v: ['Aula 25 e 26: Clima e Climogramas - Profª Thais Formagio', 'Aula 19: Relevo e Aula 28: Vegetação - Profª Thais Formagio'] },
+            { t: '2. Geografia Humana (População e Espaço)', s: 'Espaço geográfico, transição demográfica, estrutura etária e migrações.', v: ['Aula 1: Espaço Geográfico e Aulas 29-30: População e Migrações - Thais Formagio'] },
+            { t: '3. Geografia Econômica (Indústria e Agricultura)', s: 'Industrialização mundial e brasileira, modelos produtivos e sistemas agrícolas.', v: ['Aula 12: Indústria e Aulas 21-22: Sistemas Agrícolas - Thais Formagio'] },
+            { t: '4. Geografia Urbana & 5. Geopolítica', s: 'Urbanização, metropolização, globalização e blocos econômicos.', v: ['Aulas 31 a 33: Urbanização e Aula 3: Globalização - Thais Formagio'] }
+          ]
+        },
+        filosofia: {
+          name: 'Filosofia',
+          items: [
+            { t: '1. História da Filosofia (Antiga, Medieval, Moderna e Contemporânea)', s: 'Evolução do pensamento filosófico do mito ao logos até a contemporaneidade.', v: ['Super Revisão de Filosofia Antiga, Medieval, Moderna e Contemporânea - Parabólica'] },
+            { t: '2. Ética', s: 'Ética das virtudes em Aristóteles, dever em Kant e dilemas morais.', v: ['Aristóteles para o ENEM (Ética) - Parabólica'] },
+            { t: '3. Política', s: 'Justiça e organização da pólis em Platão e teorias do Estado moderno.', v: ['Platão para o ENEM (A República) - Parabólica'] },
+            { t: '4. Teoria do Conhecimento (Epistemologia)', s: 'Racionalismo, empirismo e limites do conhecimento humano.', v: ['O que é Epistemologia? - Parabólica'] },
+            { t: '5. Questões Contemporâneas e Raciais', s: 'Formação social brasileira, antirracismo e pensamento decolonial.', v: ['Florestan Fernandes e a Integração do Negro na Sociedade de Classes - Parabólica'] }
+          ]
+        },
+        sociologia: {
+          name: 'Sociologia',
+          items: [
+            { t: '1. Conceitos Sociológicos e Trabalho', s: 'Clássicos da Sociologia, alienação, mais-valia e modelos produtivos.', v: ['As Concepções de Trabalho ao Longo da História - Parabólica'] },
+            { t: '2. Estratificação e Desigualdade Social', s: 'Castas, estamentos, classes sociais e desigualdade estrutural no Brasil.', v: ['Desigualdade Social e Estratificação Social - Parabólica'] },
+            { t: '3. Estado e Poder', s: 'Estado Moderno, legitimidade e tipos de dominação em Max Weber.', v: ['Estado, Poder e Cidadania - Parabólica'] },
+            { t: '4. Cidadania', s: 'Direitos civis, políticos e sociais e democracia contemporânea.', v: ['Cidadania em Diferentes Sociedades e Pensadores - Parabólica'] },
+            { t: '5. Movimentos Sociais', s: 'Lutas operárias, movimento negro, feminista, indígena e ambiental.', v: ['Os Movimentos Sociais e Minorias - Parabólica'] }
+          ]
+        }
+      }
+    };
+
+    function renderConteudos() {
+      document.querySelectorAll('#conteudoAreaGrid .choice-btn').forEach(b => {
+        b.classList.toggle('active', b.dataset.area === state.contArea);
+      });
+      const areaObj = CONTEUDOS[state.contArea];
+      const keys = Object.keys(areaObj);
+      const subRow = document.getElementById('conteudoSubRow');
+
+      if (keys.length > 1) {
+        subRow.style.display = 'flex';
+        subRow.innerHTML = keys.map(k => `
+          <button type="button" class="sub-pill ${k === state.contDisc ? 'active' : ''}" data-action="cont-disc" data-disc="${k}">${areaObj[k].name}</button>
+        `).join('');
+      } else {
+        subRow.style.display = 'none';
+      }
+
+      const disc = areaObj[state.contDisc];
+      document.getElementById('conteudosCardsList').innerHTML = disc.items.map(it => `
+        <div class="card">
+          <span class="kicker">${disc.name}</span>
+          <h3 style="font-size:1.2rem;margin:0.2rem 0">${it.t}</h3>
+          ${!disc.noSummary && it.s ? `<div class="summary-box"><strong>Resumo:</strong> ${it.s}</div>` : ''}
+          <div>
+            ${it.v.map(vl => `<a href="https://www.youtube.com/results?search_query=${encodeURIComponent(vl)}" target="_blank" rel="noopener noreferrer" class="action-link">▶ ${vl} ↗</a>`).join('')}
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // =========================================================================
+    // 5. DADOS DE QUESTÕES (EXERCÍCIOS DIRECIONADOS)
+    // =========================================================================
+    const QUESTOES = {
+      natureza: {
+        biologia: {
+          name: 'Biologia',
+          items: [
+            { t: '1. Citologia', d: 'Célula, organelas, membrana plasmática, metabolismo celular, mitose e meiose.', l: 'Exercícios de Citologia - Brasil Escola' },
+            { t: '2. Histologia', d: 'Tecidos animais (epitelial, conjuntivo, muscular, nervoso) e vegetais.', l: 'Exercícios de Histologia Animal e Vegetal - Toda Matéria' },
+            { t: '3. Ecologia', d: 'Ecossistemas, cadeias/teias alimentares, relações ecológicas e ciclos biogeoquímicos.', l: 'Exercícios de Ecologia - Brasil Escola' },
+            { t: '4. Genética', d: 'Leis de Mendel, heredogramas, grupos sanguíneos ABO/Rh, mutações e biotecnologia.', l: 'Exercícios de Genética - Toda Matéria' },
+            { t: '5. Evolução e Origem da Vida', d: 'Abiogênese x biogênese, Lamarckismo, Darwinismo e Neodarwinismo.', l: 'Exercícios de Evolução - Brasil Escola' },
+            { t: '6. Fisiologia Humana e Animal', d: 'Sistemas digestório, respiratório, circulatório, excretor, nervoso e endócrino.', l: 'Exercícios de Fisiologia Humana - Toda Matéria' },
+            { t: '7. Embriogênese', d: 'Fecundação, clivagem, blástula, gástrula, nêurula e anexos embrionários.', l: 'Exercícios de Embriologia - Mundo Educação' },
+            { t: '8. Reprodução Humana', d: 'Sistemas reprodutores, gametogênese, ciclos menstruais e contraceptivos.', l: 'Exercícios de Reprodução Humana - Brasil Escola' },
+            { t: '9. Classificação dos Seres Vivos', d: 'Nomenclatura científica, categorias taxonômicas e os cinco reinos.', l: 'Exercícios de Reinos dos Seres Vivos - Toda Matéria' },
+            { t: '10. Morfologia e Fisiologia Vegetal', d: 'Raiz, caule, folha, flor, fruto, seiva e hormônios vegetais.', l: 'Exercícios de Botânica - Brasil Escola' }
+          ]
+        },
+        fisica: {
+          name: 'Física',
+          items: [
+            { t: '1. Forças e Mecânica', d: 'Cinemática, Leis de Newton, forças de atrito, plano inclinado e estática.', l: 'Exercícios de Dinâmica e Leis de Newton - Brasil Escola' },
+            { t: '2. Trabalho e Energia', d: 'Trabalho, energia cinética, potenciais e conservação de energia mecânica.', l: 'Exercícios de Trabalho e Energia - Toda Matéria' },
+            { t: '3. Dinâmica Impulsiva', d: 'Impulso, quantidade de movimento e colisões.', l: 'Exercícios de Impulso e Quantidade de Movimento - Brasil Escola' },
+            { t: '4. Calor (Termometria e Calorimetria)', d: 'Escalas termométricas, dilatação, calor sensível/latente e propagação.', l: 'Exercícios de Calorimetria - Mundo Educação' },
+            { t: '5. Gases Ideais e Termodinâmica', d: 'Transformações gasosas, Equação de Clapeyron e Leis da Termodinâmica.', l: 'Exercícios de Termodinâmica - Brasil Escola' },
+            { t: '6. Ondulatória', d: 'Velocidade de propagação, reflexão, refração, difração, interferência e Efeito Doppler.', l: 'Exercícios de Ondulatória - Toda Matéria' },
+            { t: '7. Óptica e Fenômenos Luminosos', d: 'Espelhos planos e esféricos, refração e lentes esféricas.', l: 'Exercícios de Óptica Geométrica - Brasil Escola' },
+            { t: '8. Ondas Eletromagnéticas', d: 'Espectro eletromagnético, propriedades e aplicações tecnológicas.', l: 'Exercícios sobre Espectro Eletromagnético - Toda Matéria' },
+            { t: '9. Geração e Consumo de Energia', d: 'Fontes renováveis/não renováveis, usinas e consumo elétrico(kWh).', l: 'Exercícios de Fontes de Energia e Consumo - Brasil Escola' },
+            { t: '10. Eletromagnetismo', d: 'Campo magnético, força magnética e Lei de Faraday-Lenz.', l: 'Exercícios de Eletromagnetismo - Toda Matéria' }
+          ]
+        },
+        quimica: {
+          name: 'Química',
+          items: [
+            { t: '1. Estrutura e Modelos da Matéria', d: 'Dalton, Thomson, Rutherford, Bohr, íons, isótopos e distribuição eletrônica.', l: 'Exercícios de Modelos Atômicos - Brasil Escola' },
+            { t: '2. Tabela Periódica', d: 'Períodos, famílias e propriedades periódicas.', l: 'Exercícios sobre a Tabela Periódica - Toda Matéria' },
+            { t: '3. Ligações Químicas', d: 'Regra do Octeto, ligações iônicas, covalentes, metálicas e forças intermoleculares.', l: 'Exercícios de Ligações Químicas - Brasil Escola' },
+            { t: '4. Funções e Reações Químicas', d: 'Ácidos, bases, sais e óxidos, reações e balanceamento.', l: 'Exercícios de Funções Inorgânicas - Toda Matéria' },
+            { t: '5. Físico-Química', d: 'Soluções, termoquímica, cinética, equilíbrio químico e eletroquímica.', l: 'Exercícios de Físico-Química - Brasil Escola' },
+            { t: '6. Química Orgânica e Ambiental', d: 'Cadeias carbônicas, funções orgânicas, isomeria, reações e química ambiental.', l: 'Exercícios de Química Orgânica - Toda Matéria' }
+          ]
+        }
+      },
+      humanas: {
+        historia: {
+          name: 'História',
+          items: [
+            { t: '1. Pré-História e Antiguidade Oriental', d: 'Paleolítico, Neolítico, Mesopotâmia, Egito, hebreus, fenícios e persas.', l: 'Exercícios de Antiguidade Oriental - Brasil Escola' },
+            { t: '2. Antiguidade Clássica (Grécia e Roma)', d: 'Democracia ateniense, Esparta, República e Império Romano.', l: 'Exercícios de Grécia e Roma Antiga - Toda Matéria' },
+            { t: '3. Idade Média (Alta e Baixa)', d: 'Feudalismo, Igreja Católica, Cruzadas e Renascimento Comercial.', l: 'Exercícios de Idade Média e Feudalismo - Brasil Escola' },
+            { t: '4. Idade Moderna', d: 'Absolutismo, Mercantilismo, Expansão Marítima, Renascimento, Reforma e Iluminismo.', l: 'Exercícios de Idade Moderna - Toda Matéria' },
+            { t: '5. Idade Contemporânea (Séc. XVIII e XIX)', d: 'Revolução Industrial, Revolução Francesa, Era Napoleônica e Imperialismo.', l: 'Exercícios de Revolução Industrial e Francesa - Brasil Escola' },
+            { t: '6. Idade Contemporânea (Séc. XX e Atualidades)', d: '1ª e 2ª Guerras Mundiais, Crise de 1929, Totalitarismo e Guerra Fria.', l: 'Exercícios de História Contemporânea (Século XX) - Toda Matéria' },
+            { t: '7. Brasil Colônia', d: 'Capitanias, economia açucareira, escravidão, ciclo do ouro e conjurações.', l: 'Exercícios de Brasil Colônia - Brasil Escola' },
+            { t: '8. Período Joanino e Independência', d: 'Vinda da Corte (1808), Revolução Pernambucana e Independência (1822).', l: 'Exercícios sobre Período Joanino e Independência - Toda Matéria' },
+            { t: '9. Brasil Império', d: 'Primeiro Reinado, Regência, Segundo Reinado, café, Guerra do Paraguai e Abolição.', l: 'Exercícios de Brasil Império - Brasil Escola' },
+            { t: '10. Primeira República (1889–1930)', d: 'Café com leite, coronelismo, Canudos, Revolta da Vacina e Semana de 22.', l: 'Exercícios de Primeira República - Toda Matéria' },
+            { t: '11. Era Vargas (1930–1945)', d: 'Revolução de 30, Constitucionalista de 32, Estado Novo e CLT.', l: 'Exercícios sobre a Era Vargas - Brasil Escola' },
+            { t: '12. República Populista (1945–1964)', d: 'Constituição de 1946, JK, Jânio Quadros, João Goulart e Golpe de 1964.', l: 'Exercícios de República Populista (1945–1964) - Toda Matéria' },
+            { t: '13. Ditadura Militar e Nova República', d: 'Atos Institucionais, Milagre Econômico, Diretas Já e Constituição de 1988.', l: 'Exercícios de Ditadura Militar e Nova República - Brasil Escola' }
+          ]
+        },
+        geografia: {
+          name: 'Geografia',
+          items: [
+            { t: '1. Clima e Meteorologia', d: 'Atmosfera, fatores climáticos, El Niño, La Niña e climas do Brasil.', l: 'Exercícios de Climatologia - Brasil Escola' },
+            { t: '2. Relevo e Geomorfologia', d: 'Agentes endógenos e exógenos e formas de relevo.', l: 'Exercícios de Relevo - Toda Matéria' },
+            { t: '3. Biogeografia (Vegetação)', d: 'Biomas mundiais e formações vegetais brasileiras.', l: 'Exercícios de Biomas e Vegetação - Brasil Escola' },
+            { t: '4. Dinâmica Terrestre (Geologia)', d: 'Placas tectônicas, tipos de rochas e estrutura geológica do Brasil.', l: 'Exercícios de Geologia e Dinâmica Terrestre - Mundo Educação' },
+            { t: '5. Geografia Econômica', d: 'Setores da economia, industrialização, toyotismo e agronegócio.', l: 'Exercícios de Geografia Econômica e Indústria - Toda Matéria' },
+            { t: '6. Geografia Urbana', d: 'Urbanização, metropolização, conurbação e segregação socioespacial.', l: 'Exercícios de Urbanização - Brasil Escola' },
+            { t: '7. Geopolítica e Geografia Política', d: 'Globalização, DIT, blocos econômicos e organismos internacionais.', l: 'Exercícios de Geopolítica e Globalização - Toda Matéria' }
+          ]
+        },
+        filosofia: {
+          name: 'Filosofia',
+          items: [
+            { t: '1. Filosofia Antiga (Grega)', d: 'Pré-socráticos, Sócrates, Platão, Aristóteles e helenismo.', l: 'Exercícios de Filosofia Antiga - Brasil Escola' },
+            { t: '2. Filosofia Medieval e Cristã', d: 'Patrística (Santo Agostinho) e Escolástica (São Tomás de Aquino).', l: 'Exercícios de Filosofia Medieval - Toda Matéria' },
+            { t: '3. Filosofia Moderna', d: 'Racionalismo (Descartes), Empirismo (Locke, Hume) e Criticismo (Kant).', l: 'Exercícios de Filosofia Moderna - Brasil Escola' },
+            { t: '4. Filosofia Contemporânea', d: 'Hegel, Marx, Nietzsche, Existencialismo, Escola de Frankfurt e Foucault.', l: 'Exercícios de Filosofia Contemporânea - Toda Matéria' },
+            { t: '5. Ética e Filosofia Moral', d: 'Ética das virtudes, imperativo categórico, utilitarismo e bioética.', l: 'Exercícios sobre Ética e Moral - Brasil Escola' },
+            { t: '6. Filosofia Política', d: 'Maquiavel, Hobbes, Locke, Rousseau, Montesquieu e Hannah Arendt.', l: 'Exercícios de Filosofia Política - Toda Matéria' },
+            { t: '7. Teoria do Conhecimento', d: 'Dogmatismo, ceticismo, apriorismo e filosofia da ciência (Popper e Kuhn).', l: 'Exercícios de Teoria do Conhecimento - Mundo Educação' },
+            { t: '8. Questões Contemporâneas e Raciais', d: 'Pensamento decolonial, racismo estrutural, interseccionalidade e direitos humanos.', l: 'Exercícios sobre Racismo, Diversidade e Direitos Humanos - Brasil Escola' }
+          ]
+        },
+        sociologia: {
+          name: 'Sociologia',
+          items: [
+            { t: '1. Conceitos Sociológicos e Trabalho', d: 'Comte, Durkheim, Marx e Weber; alienação, mais-valia, fordismo e uberização.', l: 'Exercícios sobre Trabalho e Sociedade - Brasil Escola' },
+            { t: '2. Estratificação e Desigualdade Social', d: 'Castas, estamentos, classes sociais e interseções de classe, raça e gênero.', l: 'Exercícios sobre Estratificação e Desigualdade Social - Toda Matéria' },
+            { t: '3. Estado e Poder', d: 'Estado Moderno, dominação weberiana e sistemas democráticos.', l: 'Exercícios sobre Estado, Poder e Política - Brasil Escola' },
+            { t: '4. Cidadania e Direitos', d: 'Direitos civis, políticos e sociais (Marshall), Constituição de 1988 e direitos humanos.', l: 'Exercícios sobre Cidadania e Direitos Humanos - Toda Matéria' },
+            { t: '5. Movimentos Sociais', d: 'Movimentos operário, negro, feminista, LGBTQIA+, indígena e ambiental.', l: 'Exercícios sobre Movimentos Sociais - Brasil Escola' }
+          ]
+        }
+      },
+      matematica: {
+        matematica: {
+          name: 'Matemática',
+          items: [
+            { t: '1. Conjuntos Numéricos, Razões, Proporções, Porcentagem e Juros', d: 'Conjuntos (ℕ, ℤ, ℚ, 𝕀, ℝ), regra de três, porcentagem e juros simples/compostos.', l: 'Exercícios de Matemática Financeira e Porcentagem - Brasil Escola' },
+            { t: '2. Funções, Equações, Inequações e Sequências/Progressões', d: 'Funções afim, quadrática, modular, exponencial, logarítmica, PA e PG.', l: 'Exercícios de Funções e Progressões - Toda Matéria' },
+            { t: '3. Análise Combinatória, Probabilidade e Estatística', d: 'Arranjos, permutações, combinações, probabilidade e medidas estatísticas.', l: 'Exercícios de Análise Combinatória e Probabilidade - Brasil Escola' },
+            { t: '4. Trigonometria', d: 'Triângulo retângulo, ciclo trigonométrico, leis dos senos e dos cossenos.', l: 'Exercícios de Trigonometria - Toda Matéria' },
+            { t: '5. Matrizes, Determinantes e Sistemas Lineares', d: 'Matrizes, Sarrus, Laplace, matriz inversa, escalonamento e Cramer.', l: 'Exercícios de Matrizes e Determinantes - Brasil Escola' },
+            { t: '6. Geometria Plana, Espacial e Analítica Plana', d: 'Áreas, volumes de sólidos, ponto, reta e circunferência.', l: 'Exercícios de Geometria Plana e Espacial - Toda Matéria' },
+            { t: '7. Números Complexos, Polinômios e Equações Algébricas', d: 'Plano de Argand-Gauss, raízes da unidade, Briot-Ruffini e Girard.', l: 'Exercícios de Números Complexos e Polinômios - Brasil Escola' }
+          ]
+        }
+      }
+    };
+
+    function renderQuestoes() {
+      document.querySelectorAll('#questoesAreaGrid .choice-btn').forEach(b => {
+        b.classList.toggle('active', b.dataset.area === state.questArea);
+      });
+      const areaObj = QUESTOES[state.questArea];
+      const keys = Object.keys(areaObj);
+      const subRow = document.getElementById('questoesSubRow');
+
+      if (keys.length > 1) {
+        subRow.style.display = 'flex';
+        subRow.innerHTML = keys.map(k => `
+          <button type="button" class="sub-pill ${k === state.questDisc ? 'active' : ''}" data-action="quest-disc" data-disc="${k}">${areaObj[k].name}</button>
+        `).join('');
+      } else {
+        subRow.style.display = 'none';
+      }
+
+      const disc = areaObj[state.questDisc];
+      document.getElementById('questoesCardsList').innerHTML = disc.items.map(it => `
+        <div class="card">
+          <span class="kicker">${disc.name}</span>
+          <h3 style="font-size:1.18rem;margin:0.2rem 0">${it.t}</h3>
+          <p style="font-size:0.86rem;color:var(--slate);margin-bottom:0.65rem">${it.d}</p>
+          <a href="https://www.google.com/search?q=${encodeURIComponent(it.l)}" target="_blank" rel="noopener noreferrer" class="action-link">🔗 ${it.l} ↗</a>
+        </div>
+      `).join('');
+    }
+
+    // =========================================================================
+    // 6. DADOS DAS 5 OBRAS LITERÁRIAS UFU
+    // =========================================================================
+    const OBRAS = [
+      {
+        id: 'vida-segredo', num: 'Obra 01', title: 'Uma vida em segredo', author: 'Autran Dourado (1964)',
+        resumo: 'Novela ambientada em Minas Gerais, no começo do século XX. Biela é uma moça do campo que precisa se mudar para a casa de parentes na cidade fictícia de Duas Pontes (primo Conrado e sua mulher, Constança). Ela vive seus pequenos segredos num mundo particular, com lembranças da fazenda do Fundão e impressões sobre a nova vida urbana. Biela não se adapta aos costumes da cidade e é vista como simples demais pelos outros, mas guarda uma vida interior própria.',
+        pontos: [
+          'Campo × cidade: o Fundão representa a liberdade e a memória, enquanto a cidade traz regras sociais.',
+          'Constança: personagem feminina oposta a Biela, que controla os outros por estratégias ligadas à ordem patriarcal.',
+          'Narrador: "esconde" a vida de Biela, fazendo dela realmente uma vida em segredo.',
+          'Gênero e poder: papéis masculinos e femininos, família mineira e violência simbólica.',
+          'Duas Pontes: cidade fictícia recorrente na obra de Autran Dourado; adaptação cinematográfica de Suzana Amaral (2001).'
+        ]
+      },
+      {
+        id: 'invencao-memoria', num: 'Obra 02', title: 'Invenção e memória', author: 'Lygia Fagundes Telles (2000)',
+        resumo: 'Livro com 15 contos que variam entre relatos aparentemente autobiográficos e narrativas ficcionais, com forte carga simbólica e existencial. Epígrafe de Paulo Emilio: "Invento, mas invento com a secreta esperança de estar inventando certo". Contos destacados: "A chave na porta", "Que se chama solidão", "Se és capaz" e "Suicídio na granja".',
+        pontos: [
+          'Autoficção: a fronteira entre o vivido e o inventado é o eixo central do livro.',
+          'Memória e fantástico: o sobrenatural aparece como metáfora da memória e da impossibilidade de voltar ao passado.',
+          'Intertextualidade: diálogo com Machado de Assis (Capitu), Rudyard Kipling ("If") e Edgar Allan Poe.',
+          'Temas: infância, perda, solidão, morte, passagem do tempo e relações de classe.',
+          'Gênero conto: poucos personagens, condensação narrativa e final aberto.'
+        ]
+      },
+      {
+        id: 'coral-poemas', num: 'Obra 03', title: 'Coral e outros poemas', author: 'Sophia de Mello Breyner Andresen',
+        resumo: 'Coletânea da grande poeta portuguesa do século XX (Coral é originalmente de 1950). Sua poesia destaca-se por imagens concretas (mar, praia, luz, areia, pedra e coral), linguagem limpa e precisa, inspiração na tradição clássica greco-mediterrânica e compromisso ético com a justiça e a dignidade frente ao Estado Novo português.',
+        pontos: [
+          'Identificação do eu lírico e do tom contemplativo e reflexivo.',
+          'Figuras de linguagem: metáfora, personificação, comparação e sinestesia.',
+          'Simbologia do mar como pureza, origem, eternidade e liberdade.',
+          'Aspectos formais: versos livres, ritmo cadenciado e rigor sonoro.',
+          'Comparação com João Cabral de Melo Neto: ambos usam linguagem concreta, mas Sophia é luminosa e Cabral mais seco.'
+        ]
+      },
+      {
+        id: 'auto-frade', num: 'Obra 04', title: 'Auto do frade', author: 'João Cabral de Melo Neto (1984)',
+        resumo: 'Poema dramático "para vozes" sobre Frei Caneca, líder da Confederação do Equador executado no Recife em 1825 (fuzilado após os carrascos se recusarem a enforcá-lo). A obra acompanha seu trajeto até a execução enquanto vozes anônimas do povo comentam o tratamento desumano e a firmeza do frade.',
+        pontos: [
+          'Contexto histórico: Confederação do Equador (1824), reação ao centralismo imperial e ideal republicano/federalista.',
+          'Contexto de escrita (1984): fim da ditadura militar no Brasil e crítica à censura e à repressão.',
+          'Gênero "auto": tradição dramática religiosa associada à Paixão de Cristo.',
+          'Contraste entre as vozes anônimas da multidão e a voz contida do frade.',
+          'Poética cabralina: concretude, rigor formal, antilirismo e diálogo com Morte e vida severina.'
+        ]
+      },
+      {
+        id: 'amor-acaba', num: 'Obra 05', title: 'O amor acaba', author: 'Paulo Mendes Campos',
+        resumo: 'Coletânea de crônicas líricas e existenciais do escritor mineiro Paulo Mendes Campos (1922–1991). Partindo de cenas e sentimentos cotidianos (amor, saudade, passagem do tempo e perda), os textos alcançam reflexões universais sobre a condição humana, mesclando lirismo, humor, ironia e linguagem coloquial elaborada.',
+        pontos: [
+          'Gênero crônica: fronteira entre jornalismo e literatura, texto breve, olhar subjetivo sobre o cotidiano.',
+          'Lirismo em prosa: presença de imagens poéticas, ritmo e musicalidade.',
+          'Do particular ao universal: um episódio simples desencadeia reflexão existencial sobre o tempo.',
+          'Figuras de linguagem: metáfora, antítese, paradoxo e ironia.',
+          'Temas centrais: efemeridade do amor, finitude humana e memória.'
+        ]
+      }
+    ];
+
+    function renderObras() {
+      document.getElementById('obrasBtnGrid').innerHTML = OBRAS.map(o => `
+        <button type="button" class="choice-btn ${o.id === state.obraId ? 'active' : ''}" data-action="select-obra" data-obra="${o.id}">
+          <span class="kicker">${o.num}</span>
+          <strong style="font-size:0.98rem;display:block">${o.title}</strong>
+          <small style="font-size:0.74rem;opacity:0.85">${o.author}</small>
+        </button>
+      `).join('');
+
+      const o = OBRAS.find(x => x.id === state.obraId);
+      document.getElementById('obraDetailBox').innerHTML = `
+        <span class="kicker">${o.num} • LEITURA OBRIGATÓRIA UFU</span>
+        <h3 style="font-size:1.5rem;margin:0.2rem 0">${o.title}</h3>
+        <div style="font-weight:700;color:var(--teal);font-size:0.88rem;margin-bottom:0.75rem">${o.author}</div>
+        <div class="summary-box"><strong>Resumo da Obra:</strong> ${o.resumo}</div>
+        <h4 style="font-size:0.82rem;text-transform:uppercase;letter-spacing:0.08em;margin:1rem 0 0.6rem">Pontos de Prova UFU</h4>
+        ${o.pontos.map((p, i) => `<div class="step-item"><span class="step-num">${i+1}</span><div>${p}</div></div>`).join('')}
+      `;
+    }
+
+    // =========================================================================
+    // 7. CHECKLIST DE PROGRESSO PERSISTENTE (LOCALSTORAGE)
+    // =========================================================================
+    const CHECKLIST_DATA = [
+      { id: 'mat', title: 'Matemática', items: ['1. Conjuntos, Razão, Proporção e Juros', '2. Funções, Equações e PA/PG', '3. Combinatória, Probabilidade e Estatística', '4. Trigonometria', '5. Matrizes, Determinantes e Sistemas', '6. Geometria Plana, Espacial e Analítica', '7. Complexos e Polinômios'] },
+      { id: 'bio', title: 'Biologia', items: ['1. Citologia', '2. Histologia', '3. Ecologia', '4. Genética', '5. Evolução e Origem da Vida', '6. Fisiologia Humana', '7. Embriogênese', '8. Reprodução Humana', '9. Taxonomia (5 Reinos)', '10. Botânica'] },
+      { id: 'fis', title: 'Física', items: ['1. Forças e Mecânica', '2. Trabalho e Energia', '3. Dinâmica Impulsiva', '4. Calorimetria e Termometria', '5. Gases e Termodinâmica', '6. Ondulatória', '7. Óptica Geométrica', '8. Ondas Eletromagnéticas', '9. Geração e Consumo de Energia', '10. Eletromagnetismo'] },
+      { id: 'qui', title: 'Química', items: ['1. Estrutura Atômica', '2. Tabela Periódica', '3. Ligações Químicas', '4. Funções e Reações Inorgânicas', '5. Físico-Química', '6. Química Orgânica e Ambiental'] },
+      { id: 'hum', title: 'Ciências Humanas', items: ['História Geral (Antiga à Contemporânea)', 'História do Brasil (Colônia à Nova República)', 'Geografia Física, Humana e Geopolítica', 'Filosofia (Antiga à Contemporânea e Ética)', 'Sociologia (Trabalho, Estado e Movimentos Sociais)'] },
+      { id: 'red_obr', title: 'Redação & Obras Literárias', items: ['6 Gêneros de Redação UFU', 'Obra 1: Uma vida em segredo', 'Obra 2: Invenção e memória', 'Obra 3: Coral e outros poemas', 'Obra 4: Auto do frade', 'Obra 5: O amor acaba'] }
+    ];
+
+    function getChecked() {
+      try { return JSON.parse(localStorage.getItem('ufu_2027_prog') || '[]'); }
+      catch { return []; }
+    }
+
+    function renderProgress() {
+      const checked = getChecked();
+      let total = 0, done = 0;
+
+      document.getElementById('progressGroupsGrid').innerHTML = CHECKLIST_DATA.map(g => {
+        let gDone = 0;
+        const rows = g.items.map((label, i) => {
+          const key = `${g.id}_${i}`;
+          const isDone = checked.includes(key);
+          if (isDone) gDone++;
+          return `
+            <div class="check-row ${isDone ? 'done' : ''}" data-action="toggle-check" data-key="${key}">
+              <span class="check-box">${isDone ? '✓' : ''}</span>
+              <span>${label}</span>
+            </div>
+          `;
+        }).join('');
+        total += g.items.length;
+        done += gDone;
+        const pct = Math.round((gDone / g.items.length) * 100);
+        return `
+          <div class="card">
+            <div style="display:flex;justify-content:space-between;align-items:center">
+              <h3 style="font-size:1.15rem">${g.title}</h3>
+              <strong style="font-size:0.8rem;color:var(--teal)">${gDone}/${g.items.length} (${pct}%)</strong>
+            </div>
+            <div class="progress-track"><div class="progress-fill" style="width:${pct}%"></div></div>
+            <div style="margin-top:0.65rem">${rows}</div>
+          </div>
+        `;
+      }).join('');
+
+      const overall = total ? Math.round((done / total) * 100) : 0;
+      document.getElementById('overallProgLabel').textContent = `${overall}% (${done}/${total})`;
+      document.getElementById('overallProgFill').style.width = `${overall}%`;
+      document.getElementById('drawerProgText').textContent = `${overall}% do edital concluído`;
+    }
+
+    // =========================================================================
+    // 8. NAVEGAÇÃO GLOBAL E DELEGAÇÃO DE EVENTOS (100% À PROVA DE FALHAS)
+    // =========================================================================
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-view').forEach(v => v.classList.remove('active'));
+      const target = document.getElementById('view-' + tabId);
+      if (target) target.classList.add('active');
+
+      document.querySelectorAll('[data-tab]').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.tab === tabId);
+      });
+      closeDrawer();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function openDrawer() {
+      document.getElementById('drawerBackdrop').classList.add('open');
+      document.getElementById('navDrawer').classList.add('open');
+    }
+
+    function closeDrawer() {
+      document.getElementById('drawerBackdrop').classList.remove('open');
+      document.getElementById('navDrawer').classList.remove('open');
+    }
+
+    // Delegação única no documento para garantir resposta imediata a qualquer clique
+    document.addEventListener('click', function (e) {
+      const tabBtn = e.target.closest('[data-tab]');
+      if (tabBtn) {
+        switchTab(tabBtn.dataset.tab);
+        return;
+      }
+
+      const actEl = e.target.closest('[data-action]');
+      if (!actEl) return;
+
+      const action = actEl.dataset.action;
+      if (action === 'open-drawer') openDrawer();
+      else if (action === 'close-drawer') closeDrawer();
+      else if (action === 'prev-month' && state.monthIdx > 0) { state.monthIdx--; renderCalendar(); }
+      else if (action === 'next-month' && state.monthIdx < MONTHS.length - 1) { state.monthIdx++; renderCalendar(); }
+      else if (action === 'select-day') { state.selectedDay = actEl.dataset.iso; renderCalendar(); }
+      else if (action === 'redacao-mode') {
+        const isGen = actEl.dataset.mode === 'generos';
+        document.getElementById('redacaoGenerosBox').style.display = isGen ? 'block' : 'none';
+        document.getElementById('redacaoCriteriosBox').style.display = isGen ? 'none' : 'block';
+        document.getElementById('btnRedacaoGeneros').classList.toggle('active', isGen);
+        document.getElementById('btnRedacaoCriterios').classList.toggle('active', !isGen);
+      }
+      else if (action === 'select-genre') { state.redacaoGenre = actEl.dataset.genre; renderRedacao(); }
+      else if (action === 'cont-area') {
+        state.contArea = actEl.dataset.area;
+        state.contDisc = Object.keys(CONTEUDOS[state.contArea])[0];
+        renderConteudos();
+      }
+      else if (action === 'cont-disc') { state.contDisc = actEl.dataset.disc; renderConteudos(); }
+      else if (action === 'quest-area') {
+        state.questArea = actEl.dataset.area;
+        state.questDisc = Object.keys(QUESTOES[state.questArea])[0];
+        renderQuestoes();
+      }
+      else if (action === 'quest-disc') { state.questDisc = actEl.dataset.disc; renderQuestoes(); }
+      else if (action === 'select-obra') { state.obraId = actEl.dataset.obra; renderObras(); }
+      else if (action === 'toggle-check') {
+        const key = actEl.dataset.key;
+        const arr = getChecked();
+        const idx = arr.indexOf(key);
+        if (idx >= 0) arr.splice(idx, 1);
+        else arr.push(key);
+        localStorage.setItem('ufu_2027_prog', JSON.stringify(arr));
+        renderProgress();
+      }
+      else if (action === 'reset-progress') {
+        localStorage.removeItem('ufu_2027_prog');
+        renderProgress();
+      }
+    });
+
+    document.getElementById('monthSelect').addEventListener('change', function (e) {
+      state.monthIdx = parseInt(e.target.value, 10) || 0;
+      renderCalendar();
+    });
+
+    // Inicialização imediata
+    renderCalendar();
+    renderRedacao();
+    renderConteudos();
+    renderQuestoes();
+    renderObras();
+    renderProgress();
+  </script>
+</body>
